@@ -1,5 +1,6 @@
 package com.markliu.tiny4j.util;
 
+import com.markliu.tiny4j.ioc.ClassScanLoadUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
