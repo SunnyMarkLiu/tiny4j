@@ -15,8 +15,4 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Controller {
-    /**
-     * Controller 类的名称
-     */
-    String value();
 }
