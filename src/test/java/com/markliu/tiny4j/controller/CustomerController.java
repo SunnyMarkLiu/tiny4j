@@ -11,7 +11,7 @@ import com.markliu.tiny4j.service.CustomerService;
  * date  :16-9-19
  * time  :上午11:43
  */
-@Controller
+@Controller("customerController")
 public class CustomerController {
 
     @Inject

@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  * date  :16-9-19
  * time  :上午11:24
  */
-@Target(ElementType.METHOD)
+@Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RequestMapping {
 

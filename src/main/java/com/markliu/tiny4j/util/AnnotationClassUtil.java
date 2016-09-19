@@ -3,10 +3,10 @@ package com.markliu.tiny4j.util;
 import com.markliu.tiny4j.annotation.Controller;
 import com.markliu.tiny4j.annotation.Service;
 import com.markliu.tiny4j.ioc.ClassScanLoadUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -17,8 +17,6 @@ import java.util.Set;
  * time  :下午3:44
  */
 public class AnnotationClassUtil {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(AnnotationClassUtil.class);
 
     private static final Set<Class<?>> ALL_CLASS_SET;
 
@@ -55,6 +53,40 @@ public class AnnotationClassUtil {
     }
 
     /**
+     * 获取所有标有 @Service 注解的类及对应的名称 value 值
+     */
+    public static Map<String, Class<?>> getServicesAndNames() {
+        Map<String, Class<?>> serviceMap = new HashMap<String, Class<?>>();
+        for (Class<?> cls : ALL_CLASS_SET) {
+            Service service = cls.getAnnotation(Service.class);
+            if (service != null) {
+                String serviceName = service.value();
+                if (StringUtil.isNotEmpty(serviceName) && !serviceMap.containsKey(serviceName)) {
+                    serviceMap.put(serviceName, cls);
+                }
+            }
+        }
+        return serviceMap;
+    }
+
+    /**
+     * 获取所有标有 @Controller 注解的类及对应的名称 value 值
+     */
+    public static Map<String, Class<?>> getControllersAndNames() {
+        Map<String, Class<?>> controllerMap = new HashMap<String, Class<?>>();
+        for (Class<?> cls : ALL_CLASS_SET) {
+            Controller controller = cls.getAnnotation(Controller.class);
+            if (controller != null) {
+                String controllerName = controller.value();
+                if (StringUtil.isNotEmpty(controllerName) && !controllerMap.containsKey(controllerName)) {
+                    controllerMap.put(controllerName, cls);
+                }
+            }
+        }
+        return controllerMap;
+    }
+
+    /**
      * 获取所有标有 @Controller, @Service 注解的类
      */
     public static Set<Class<?>> getAnnotationClassSet() {
@@ -62,5 +94,15 @@ public class AnnotationClassUtil {
         annotationSet.addAll(getControllers());
         annotationSet.addAll(getServices());
         return annotationSet;
+    }
+
+    /**
+     * 获取所有标有 @Controller, @Service 注解的类及其名称 value 值
+     */
+    public static Map<String, Class<?>> getAnnotationClassNameMap() {
+        Map<String, Class<?>> annotationClassNameMap = new HashMap<String, Class<?>>();
+        annotationClassNameMap.putAll(getControllersAndNames());
+        annotationClassNameMap.putAll(getServicesAndNames());
+        return annotationClassNameMap;
     }
 }

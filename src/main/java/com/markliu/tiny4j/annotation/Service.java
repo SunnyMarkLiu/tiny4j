@@ -18,5 +18,5 @@ public @interface Service {
     /**
      * Service 类的名称
      */
-    String value();
+    String value() default "";
 }
