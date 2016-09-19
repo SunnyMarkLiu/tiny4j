@@ -1,5 +1,6 @@
 package com.markliu.tiny4j.util;
 
+import com.markliu.tiny4j.config.ConfigHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,6 +49,14 @@ public class ClassScanLoadUtil {
             throw new RuntimeException(e);
         }
         return clazz;
+    }
+
+    /**
+     * 获取所有的 class 集合
+     */
+    public static Set<Class<?>> getAllClassSet() {
+        String appBasePackage = ConfigHelper.getAppBasePackage();
+        return scanPackageClasses(appBasePackage);
     }
 
     /**
