@@ -20,10 +20,10 @@ public @interface RequestMapping {
      * RequestMapping 所映射的请求的方法和路径
      * 如：/index
      */
-    String value() default "/";
+    String value() default "";
 
     /**
      * 封装请求方法
      */
-    RequestMethod[] method() default {};
+    RequestMethod[] method() default {RequestMethod.GET};
 }

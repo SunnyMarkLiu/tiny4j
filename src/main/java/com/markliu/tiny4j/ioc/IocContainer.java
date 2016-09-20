@@ -41,7 +41,7 @@ public class IocContainer {
     /**
      * 获取 bean 容器
      */
-    public static final Map<Class<?>, Object> getIoCBeanMap() {
+    public static Map<Class<?>, Object> getIoCBeanMap() {
         return BEAN_CONTAINER;
     }
     /**

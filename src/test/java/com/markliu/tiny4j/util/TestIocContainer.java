@@ -26,6 +26,6 @@ public class TestIocContainer {
 //        ClassScanLoadUtil.loadClass("com.markliu.tiny4j.ioc.IoCInjectHelper", true);
         IocContainerLoader.initIocContainer();
         CustomerController controller = IocContainer.getBeanByClass(CustomerController.class);
-        controller.testMethod();
+        controller.testMethod(null);
     }
 }
