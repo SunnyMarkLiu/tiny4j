@@ -19,6 +19,6 @@ public class CustomerController {
 
     @RequestMapping(value = "/testMethod", method = {RequestMethod.GET, RequestMethod.POST})
     public void testMethod() {
-
+        customerService.someServiceMethod();
     }
 }

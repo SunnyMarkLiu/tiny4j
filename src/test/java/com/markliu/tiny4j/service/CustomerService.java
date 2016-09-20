@@ -9,4 +9,9 @@ import com.markliu.tiny4j.annotation.Service;
  */
 @Service("customerService")
 public class CustomerService {
+
+    public void someServiceMethod() {
+        System.out.println("CustomerService someServiceMethod");
+    }
+
 }

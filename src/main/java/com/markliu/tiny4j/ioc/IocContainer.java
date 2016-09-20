@@ -39,6 +39,12 @@ public class IocContainer {
     }
 
     /**
+     * 获取 bean 容器
+     */
+    public static final Map<Class<?>, Object> getIoCBeanMap() {
+        return BEAN_CONTAINER;
+    }
+    /**
      * 获取应用包下的所有的 Controller、Service 类，实例化，添加到 IoC 容器中。
      * 注意 Controller、Service 类的单例，不能重复初始化
      */

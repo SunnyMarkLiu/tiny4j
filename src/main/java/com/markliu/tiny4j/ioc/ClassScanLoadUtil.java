@@ -43,7 +43,7 @@ public class ClassScanLoadUtil {
      * @param initialize 是否初始化，此处指的是是否执行静态代码块
      * @return Class
      */
-    public static Class<?> loadCLass(String className, boolean initialize) {
+    public static Class<?> loadClass(String className, boolean initialize) {
         Class<?> clazz;
         try {
             clazz = Class.forName(className, initialize, getClassLoader());
@@ -154,7 +154,7 @@ public class ClassScanLoadUtil {
      */
     private static void addScanedClass(Set<Class<?>> classSet, String className) {
         // 获取 String 包类型所对应的 Class 对象，即加载该 Class
-        Class<?> cls = loadCLass(className, false);// 加载 Class，不执行静态代码块
+        Class<?> cls = loadClass(className, false);// 加载 Class，不执行静态代码块
         classSet.add(cls);
     }
 }

@@ -19,6 +19,6 @@ public class UserController {
 
     @RequestMapping(value = "/testMethod", method = {RequestMethod.GET, RequestMethod.POST})
     public void testMethod() {
-
+        userService.someServiceMethod();
     }
 }
