@@ -1,9 +1,8 @@
 package com.markliu.tiny4j.util;
 
 import com.markliu.tiny4j.controller.CustomerController;
-import com.markliu.tiny4j.ioc.ClassScanLoadUtil;
 import com.markliu.tiny4j.ioc.IocContainer;
-import org.apache.taglibs.standard.lang.jstl.ImplicitObjects;
+import com.markliu.tiny4j.ioc.IocContainerLoader;
 import org.junit.Test;
 
 /**
@@ -24,7 +23,8 @@ public class TestIocContainer {
 
     @Test
     public void testIoCinject() {
-        ClassScanLoadUtil.loadClass("com.markliu.tiny4j.ioc.IoCInjectHelper", true);
+//        ClassScanLoadUtil.loadClass("com.markliu.tiny4j.ioc.IoCInjectHelper", true);
+        IocContainerLoader.initIocContainer();
         CustomerController controller = IocContainer.getBeanByClass(CustomerController.class);
         controller.testMethod();
     }

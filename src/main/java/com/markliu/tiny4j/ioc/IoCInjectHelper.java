@@ -1,16 +1,13 @@
 package com.markliu.tiny4j.ioc;
 
 import com.markliu.tiny4j.annotation.Inject;
-import com.markliu.tiny4j.util.AnnotationClassUtil;
 import com.markliu.tiny4j.util.ArrayUtil;
-import com.markliu.tiny4j.util.CollectionUtil;
 import com.markliu.tiny4j.util.ReflectionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * IoC 容器中实现对 Controller 和 Service 的属性的依赖注入。
