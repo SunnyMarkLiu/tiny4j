@@ -1,5 +1,7 @@
 package com.markliu.tiny4j.ioc;
 
+import com.markliu.tiny4j.annotation.Controller;
+import com.markliu.tiny4j.annotation.Service;
 import com.markliu.tiny4j.util.AnnotationClassUtil;
 import com.markliu.tiny4j.util.ReflectionUtil;
 
@@ -31,20 +33,27 @@ public class IocContainer {
     }
 
     /**
-     * 获取应用包下的所有的 Controller、Service 类，实例化，添加到 IoC 容器中
+     * 获取应用包下的所有的 Controller、Service 类，实例化，添加到 IoC 容器中。
+     * 注意 Controller、Service 类的单例，不能重复初始化
      */
     private static void createIocContainer() {
         Set<Class<?>> annotationClassSet = AnnotationClassUtil.getAnnotationClassSet();
         for (Class<?> beanClass : annotationClassSet) {
             Object bean = ReflectionUtil.newInstance(beanClass);
             BEAN_CONTAINER.put(beanClass, bean);
-        }
 
-        // 设置 BEAN_CLASSNAME_CONTAINER 容器的值
-        Map<String, Class<?>> annotationClassNameMap = AnnotationClassUtil.getAnnotationClassNameMap();
-        for (Map.Entry<String, Class<?>> annotation : annotationClassNameMap.entrySet()) {
-            Object bean = ReflectionUtil.newInstance(annotation.getValue());
-            BEAN_CLASSNAME_CONTAINER.put(annotation.getKey(), bean);
+            // 设置 BEAN_CLASSNAME_CONTAINER 容器的值
+            Controller controller = beanClass.getAnnotation(Controller.class);
+            Service service = beanClass.getAnnotation(Service.class);
+
+            if (controller != null) {
+                String controllerName = controller.value();
+                BEAN_CLASSNAME_CONTAINER.put(controllerName, bean);
+            }
+            if (service != null) {
+                String serviceName = service.value();
+                BEAN_CLASSNAME_CONTAINER.put(serviceName, bean);
+            }
         }
     }
 

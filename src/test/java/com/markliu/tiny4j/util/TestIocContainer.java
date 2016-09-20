@@ -17,5 +17,6 @@ public class TestIocContainer {
         CustomerController customerController = (CustomerController) IocContainer.getBeanByClassName("customerController");
         System.out.println(controller);
         System.out.println(customerController);
+        System.out.println(controller == customerController);
     }
 }
