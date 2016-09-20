@@ -4,6 +4,8 @@ import com.markliu.tiny4j.annotation.Controller;
 import com.markliu.tiny4j.annotation.Service;
 import com.markliu.tiny4j.util.AnnotationClassUtil;
 import com.markliu.tiny4j.util.ReflectionUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,6 +20,8 @@ import java.util.Set;
  */
 public class IocContainer {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(IocContainer.class);
+
     /**
      * beanclass - bean 容器
      */
@@ -29,7 +33,9 @@ public class IocContainer {
     private static final Map<String, Object> BEAN_CLASSNAME_CONTAINER = new HashMap<String, Object>();
 
     static {
+        LOGGER.info("Initialize the IoC container...");
         createIocContainer();
+        LOGGER.info("Initialize the IoC container successfully.");
     }
 
     /**
@@ -65,6 +71,7 @@ public class IocContainer {
     @SuppressWarnings("unchecked")
     public static <T> T getBeanByClass(Class<T> classType) {
         if (!BEAN_CONTAINER.containsKey(classType)) {
+            LOGGER.error("can't get bean by class " + classType);
             throw new RuntimeException("can't get bean by class " + classType);
         }
         return (T) BEAN_CONTAINER.get(classType);
@@ -77,6 +84,7 @@ public class IocContainer {
      */
     public static Object getBeanByClassName(String className) {
         if (!BEAN_CLASSNAME_CONTAINER.containsKey(className)) {
+            LOGGER.error("can't get bean by classname " + className);
             throw new RuntimeException("can't get bean by classname " + className);
         }
         return BEAN_CLASSNAME_CONTAINER.get(className);

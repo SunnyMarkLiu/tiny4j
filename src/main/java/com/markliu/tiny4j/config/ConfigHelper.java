@@ -18,8 +18,6 @@ public class ConfigHelper {
     public static final Properties CONFIG_PROPERTIES =
             PropertiesUtil.loadProperties(ConfigConstant.CONFIG_FILE);
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(ConfigHelper.class);
-
     /**
      * 获取 jdbc 驱动
      * @return jdbc 驱动所对应的全类名
