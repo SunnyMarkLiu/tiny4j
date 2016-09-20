@@ -21,7 +21,7 @@ import java.util.Set;
  * date  :16-9-20
  * time  :下午6:46
  */
-public class RequestControllerMapping {
+public class HandlerMapping {
 
     private static final Map<Request, Handler> REQUEST_HANDLER_MAP = new HashMap<Request, Handler>();
 

@@ -3,7 +3,7 @@ package com.markliu.tiny4j.util;
 import com.markliu.tiny4j.annotation.RequestMethod;
 import com.markliu.tiny4j.http.Handler;
 import com.markliu.tiny4j.http.Request;
-import com.markliu.tiny4j.http.RequestControllerMapping;
+import com.markliu.tiny4j.http.HandlerMapping;
 import com.markliu.tiny4j.ioc.IocContainer;
 import com.markliu.tiny4j.ioc.IocContainerLoader;
 import org.junit.Test;
@@ -23,10 +23,10 @@ public class TestRequestControllerMapping {
         // 初始化 IoC 容器s
         IocContainerLoader.initIocContainer();
 
-        RequestMethod[] requestMethods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE};
+        RequestMethod[] requestMethods = {RequestMethod.GET};
         Request request = new Request("/customer/testMethod" , requestMethods);
 
-        Handler handler = RequestControllerMapping.getRequestHandler(request);
+        Handler handler = HandlerMapping.getRequestHandler(request);
         Class<?> responseController = handler.getResponseController();
         Method actionMethod = handler.getActionMethod();
 
