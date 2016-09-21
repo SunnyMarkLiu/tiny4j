@@ -26,7 +26,7 @@ public class TestRequestControllerMapping {
         RequestMethod[] requestMethods = {RequestMethod.GET};
         Request request = new Request("/customer/testMethod" , requestMethods);
 
-        Handler handler = HandlerMapping.getRequestHandler(request);
+        Handler handler = HandlerMapping.getRequestHandler("/customer/testMethod" , "GET");
         Class<?> responseController = handler.getResponseController();
         Method actionMethod = handler.getActionMethod();
 

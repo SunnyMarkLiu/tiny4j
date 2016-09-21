@@ -2,10 +2,7 @@ package com.markliu.tiny4j.http;
 
 import com.markliu.tiny4j.annotation.RequestMapping;
 import com.markliu.tiny4j.annotation.RequestMethod;
-import com.markliu.tiny4j.util.AnnotationClassUtil;
-import com.markliu.tiny4j.util.ArrayUtil;
-import com.markliu.tiny4j.util.AssertUtil;
-import com.markliu.tiny4j.util.CollectionUtil;
+import com.markliu.tiny4j.util.*;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -60,9 +57,12 @@ public class HandlerMapping {
 
     /**
      * 根据请求对象获取对应的响应类
-     * @param request 封装的请求对象
      */
-    public static Handler getRequestHandler(Request request) {
+    public static Handler getRequestHandler(String requestPath, String requestMethod) {
+
+        RequestMethod m = RequestMethodUtil.castRequestMethod(requestMethod);
+        RequestMethod[] methods = {m};
+        Request request = new Request(requestPath, methods);
         AssertUtil.notNull(request, "request can not be null!");
 
         for (Request requestKey : REQUEST_HANDLER_MAP.keySet()) {
