@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -56,16 +58,26 @@ public class DispatcherServlet extends HttpServlet {
             Object controllerBean = IocContainer.getBeanByClass(controllerClass);
             try {
 
-                // 获取请求参数，实现参数绑定(未实现)
-                Map<String, String[]> parametersMap = request.getParameterMap();
+                // 获取请求参数，实现参数绑定
+                Enumeration<String> requestParameterNames = request.getParameterNames();
+                Map<String, Object> requestParamMap = new HashMap<String, Object>();
+                if (requestParameterNames != null) {
+                    while (requestParameterNames.hasMoreElements()) {
+                        String paramName = requestParameterNames.nextElement();
+                        String paramValue = request.getParameter(paramName);
+
+                        requestParamMap.put(paramName, paramValue);
+                    }
+                }
+
+                ActionMethodParam actionMethodParam = new ActionMethodParam(requestParamMap);
 
                 // 构造处理器链 HandlerExecutionChain
                 // 调用处理器链的方法，最终调用 Controller 的方法。
+                actionMethod.invoke(controllerBean, actionMethodParam);
 
-                actionMethod.invoke(controllerBean, parametersMap);
             } catch (Exception e) {
-                LOGGER.error("handler this request error, caused by invoke the controller's method erroe!",
-                        e);
+                LOGGER.error("handler this request error, caused by invoking the controller's method erroe!", e);
             }
         }
     }
