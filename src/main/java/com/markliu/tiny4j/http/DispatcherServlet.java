@@ -1,18 +1,19 @@
 package com.markliu.tiny4j.http;
 
+import com.markliu.tiny4j.config.ConfigHelper;
 import com.markliu.tiny4j.ioc.IocContainer;
 import com.markliu.tiny4j.ioc.IocContainerLoader;
-import com.markliu.tiny4j.util.JsonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRegistration;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.lang.reflect.Method;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -37,10 +38,22 @@ public class DispatcherServlet extends HttpServlet {
     private static final Logger LOGGER = LoggerFactory.getLogger(DispatcherServlet.class);
 
     @Override
-    public void init(ServletConfig config) throws ServletException {
-        super.init(config);
+    public void init(ServletConfig servletConfig) throws ServletException {
+        super.init(servletConfig);
         // 初始化 IoC 容器
         IocContainerLoader.initIocContainer();
+
+        // 过滤请求的静态资源
+
+        ServletContext servletContext = servletConfig.getServletContext();
+
+        // 注册处理 JSP 的 Servlet
+        ServletRegistration jspServlet = servletContext.getServletRegistration("jsp");
+        jspServlet.addMapping(ConfigHelper.getAppJspPath() + "*");
+
+        // 处理静态资源的默认 Servlet
+        ServletRegistration defaultServlet = servletContext.getServletRegistration("default");
+        defaultServlet.addMapping(ConfigHelper.getAppAssetPath() + "*");
     }
 
     @Override
@@ -81,7 +94,9 @@ public class DispatcherServlet extends HttpServlet {
                     View returnView = (View) result;
                     // 视图的地址
                     String viewPath = returnView.getViewPath();
+                    viewPath = ConfigHelper.getAppJspPath() + viewPath;
                     System.out.println("viewPath: " + viewPath);
+                    request.getRequestDispatcher(viewPath).forward(request, response);
 
                 } else if (result instanceof Data) { // 如果返回的是 Json 数据
                     Data data = (Data) result;

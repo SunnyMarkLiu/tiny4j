@@ -1,5 +1,7 @@
 package com.markliu.tiny4j.http;
 
+import java.util.Map;
+
 /**
  * 响应的试图封装类
  * <p>
@@ -11,6 +13,8 @@ public class View {
 
     private String viewPath;
 
+    private Map<String, Object> modelData;
+
     public String getViewPath() {
         return viewPath;
     }
@@ -18,4 +22,13 @@ public class View {
     public void setViewPath(String viewPath) {
         this.viewPath = viewPath;
     }
+
+    public Map<String, Object> getModelData() {
+        return modelData;
+    }
+
+    public void setModelData(Map<String, Object> modelData) {
+        this.modelData = modelData;
+    }
+
 }
