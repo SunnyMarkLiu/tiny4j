@@ -2,6 +2,7 @@ package com.markliu.tiny4j.http;
 
 import com.markliu.tiny4j.ioc.IocContainer;
 import com.markliu.tiny4j.ioc.IocContainerLoader;
+import com.markliu.tiny4j.util.JsonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.lang.reflect.Method;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -74,8 +76,18 @@ public class DispatcherServlet extends HttpServlet {
 
                 // 构造处理器链 HandlerExecutionChain
                 // 调用处理器链的方法，最终调用 Controller 的方法。
-                actionMethod.invoke(controllerBean, actionMethodParam);
+                Object result = actionMethod.invoke(controllerBean, actionMethodParam);
+                if (result instanceof View) { // 如果返回的是视图页面
+                    View returnView = (View) result;
+                    // 视图的地址
+                    String viewPath = returnView.getViewPath();
+                    System.out.println("viewPath: " + viewPath);
 
+                } else if (result instanceof Data) { // 如果返回的是 Json 数据
+                    Data data = (Data) result;
+                    Object model = data.getModel();
+                    JsonWriter.writeJson(response, model);
+                }
             } catch (Exception e) {
                 LOGGER.error("handler this request error, caused by invoking the controller's method erroe!", e);
             }
