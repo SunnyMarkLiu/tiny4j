@@ -1,4 +1,4 @@
-package com.markliu.study;
+package com.markliu.study.classload;
 
 import org.junit.Test;
 
