@@ -94,9 +94,14 @@ public class DispatcherServlet extends HttpServlet {
                     View returnView = (View) result;
                     // 视图的地址
                     String viewPath = returnView.getViewPath();
-                    viewPath = ConfigHelper.getAppJspPath() + viewPath;
-                    System.out.println("viewPath: " + viewPath);
-                    request.getRequestDispatcher(viewPath).forward(request, response);
+
+                    if (viewPath.startsWith("/")) { // 如果请求的资源从根目录开始，而非 /WEB-INF 目录开始，则请求重定向
+                        response.sendRedirect(request.getContextPath() + viewPath);
+                    } else {
+                        viewPath = ConfigHelper.getAppJspPath() + viewPath;
+                        System.out.println("viewPath: " + viewPath);
+                        request.getRequestDispatcher(viewPath).forward(request, response);
+                    }
 
                 } else if (result instanceof Data) { // 如果返回的是 Json 数据
                     Data data = (Data) result;
