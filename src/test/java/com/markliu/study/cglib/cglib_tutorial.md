@@ -102,3 +102,30 @@ public /*final*/ class SampleClass {
 - `InvocationHandler` 不能实现反射调用被代理类的方法，因为没有传入被代理类的实例(`target`)，无法调用 `method.invoke(target, args)`；
 - 此处不能使用 `method.invoke(proxy, args)`，因为 `proxy` 所有方法（除`final` 修饰的方法）的调用会被委派到 `invoke` 中，会造成无限循环，`StackOverflowError`；
 - 要实现拦截方法的执行，使用另一个 callback dispatcher：`MethodInterceptor`；
+
+### Callback：MethodInterceptor
+another powerful callback dispatcher：`MethodInterceptor`
+```
+    @Test
+    public void testMethodInterceptor() {
+        Enhancer enhancer = new Enhancer();
+        enhancer.setSuperclass(SampleClass.class);
+        enhancer.setCallback(new MethodInterceptor() {
+
+            public Object intercept(Object target, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
+                System.out.println(this.getClass().getName() + " before ...");
+                System.out.println(method.getDeclaringClass() + "." + method.getName());
+                
+                // 反射调用拦截父类的方法
+                Object result = methodProxy.invokeSuper(target, args);
+                System.out.println(this.getClass().getName() + " after ...");
+                return result;
+            }
+
+        });
+
+        SampleClass proxy = (SampleClass) enhancer.create();
+        System.out.println(proxy.test("world"));
+    }
+```
+`MethodInterceptor` 可是实现拦截方法的全面控制，可以在拦截方法的直线前后进行其他操作、修改拦截的方法的返回结果等。

@@ -1,9 +1,7 @@
 package com.markliu.study.cglib;
 
 import junit.framework.Assert;
-import net.sf.cglib.proxy.Enhancer;
-import net.sf.cglib.proxy.FixedValue;
-import net.sf.cglib.proxy.InvocationHandler;
+import net.sf.cglib.proxy.*;
 import org.junit.Test;
 
 import java.lang.reflect.Method;
@@ -55,6 +53,28 @@ public class TestEnhancer {
                 // Object result = method.invoke(??, args);
                 System.out.println(this.getClass().getName() + " after ...");
                 return "result";
+            }
+
+        });
+
+        SampleClass proxy = (SampleClass) enhancer.create();
+        System.out.println(proxy.test("world"));
+    }
+
+    @Test
+    public void testMethodInterceptor() {
+        Enhancer enhancer = new Enhancer();
+        enhancer.setSuperclass(SampleClass.class);
+        enhancer.setCallback(new MethodInterceptor() {
+
+            public Object intercept(Object target, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
+                System.out.println(this.getClass().getName() + " before ...");
+                System.out.println(method.getDeclaringClass() + "." + method.getName());
+
+                // 反射调用拦截父类的方法
+                Object result = methodProxy.invokeSuper(target, args);
+                System.out.println(this.getClass().getName() + " after ...");
+                return result;
             }
 
         });
