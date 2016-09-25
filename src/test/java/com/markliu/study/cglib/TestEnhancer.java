@@ -3,6 +3,7 @@ package com.markliu.study.cglib;
 import junit.framework.Assert;
 import net.sf.cglib.beans.BeanCopier;
 import net.sf.cglib.beans.BeanGenerator;
+import net.sf.cglib.beans.BeanMap;
 import net.sf.cglib.beans.ImmutableBean;
 import net.sf.cglib.core.Converter;
 import net.sf.cglib.proxy.*;
@@ -199,5 +200,16 @@ public class TestEnhancer {
         });
         System.out.println("name:" + otherBean.getName());
         System.out.println("age:" + otherBean.getAge());
+    }
+
+    @Test
+    public void testMap() {
+        SampleClass bean = new SampleClass();
+        bean.setName("Sunny");
+        bean.setAge(20);
+        BeanMap beanMap = BeanMap.create(bean);
+
+        System.out.println("name:" + beanMap.get("name"));
+        System.out.println("age:" + beanMap.get("age"));
     }
 }

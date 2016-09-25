@@ -324,3 +324,23 @@ testBeanGenerator2:
 name:other value
 age:24
 ```
+
+## Bean Map
+`BeanMap` 用于将将对象的所有属性转换为 `String`-to-`Object` 形式的 `Map` 集合。
+```
+    @Test
+    public void testMap() {
+        SampleClass bean = new SampleClass();
+        bean.setName("Sunny");
+        bean.setAge(20);
+        BeanMap beanMap = BeanMap.create(bean);
+
+        System.out.println("name:" + beanMap.get("name"));
+        System.out.println("age:" + beanMap.get("age"));
+    }
+```
+输出：
+```
+name:Sunny
+age:20
+```
