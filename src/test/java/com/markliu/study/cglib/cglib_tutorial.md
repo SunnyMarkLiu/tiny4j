@@ -315,5 +315,12 @@ testBeanGenerator2:
 ```
 输出：
 ```
-name:Sunny
+需要复制的属性值:20
+修改需要复制的属性值...
+需要待复制的类的属性:java.lang.Integer
+需要复制的属性值:Sunny
+修改需要复制的属性值...
+需要待复制的类的属性:java.lang.String
+name:other value
+age:24
 ```
