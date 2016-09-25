@@ -198,3 +198,122 @@ Hello world
 SampleClass()...test
 input: world
 ```
+## Immutable Bean 不可变类
+使用 `ImmutableBean` 可以创建一个不可变类，当试图调用方法修改不可变类的属性时，会报 `IllegalStateException`：
+```
+    @Test
+    public void testImmutableBean() {
+        SampleClass sampleClass = new SampleClass();
+        sampleClass.setName("Sunny");
+        System.out.println("sampleClass.getName():" + sampleClass.getName());
+
+        // 创建 ImmutableBean
+        SampleClass immutableBean = (SampleClass) ImmutableBean.create(sampleClass);
+        System.out.println("immutableBean.getName():" + immutableBean.getName());
+        // sampleClass 修改状态同时会修改 immutableBean 的状态
+        sampleClass.setName("SunnyLiu");
+        System.out.println("immutableBean.getName():" + immutableBean.getName());
+        // java.lang.IllegalStateException: Bean is immutable
+        immutableBean.setName("Liu");
+    }
+```
+输出：
+```
+SampleClass()...
+sampleClass.getName():Sunny
+SampleClass()...
+immutableBean.getName():Sunny
+immutableBean.getName():SunnyLiu
+
+java.lang.IllegalStateException: Bean is immutable
+    ...
+```
+如上面的例子所示，`ImmutableBean`会阻止所有状态信息的改变，抛出 `java.lang.IllegalStateException: Bean is immutable` 异常。
+
+## Bean Generator 
+`BeanGenerator` 用于在运行时实例化对象。
+```
+    /**
+     * 生成指定类的实例
+     */
+    @Test
+    public void testBeanGenerator() throws Exception {
+        BeanGenerator beanGenerator = new BeanGenerator();
+        // 生成指定类的实例
+        beanGenerator.setSuperclass(SampleClass.class);
+        Object bean = beanGenerator.create();
+
+        Method setName = bean.getClass().getMethod("setName", String.class);
+        Object result = setName.invoke(bean, "Sunny");
+        System.out.println("result:" + result);
+
+        Method getName = bean.getClass().getMethod("getName");
+        Object name = getName.invoke(bean);
+        System.out.println("name:" + name);
+    }
+
+    /**
+     * 动态指定类的属性等
+     */
+    @Test
+    public void testBeanGenerator2() throws Exception {
+        BeanGenerator beanGenerator = new BeanGenerator();
+        // 动态指定属性
+        beanGenerator.addProperty("name", String.class);
+        Object bean = beanGenerator.create();
+
+        Method setName = bean.getClass().getMethod("setName", String.class);
+        Object result = setName.invoke(bean, "Sunny");
+        System.out.println("result:" + result);
+
+        Method getName = bean.getClass().getMethod("getName");
+        Object name = getName.invoke(bean);
+        System.out.println("name:" + name);
+    }
+```
+输出：
+```
+testBeanGenerator:
+    SampleClass()...
+    result:null
+    name:Sunny
+    
+testBeanGenerator2:
+    result:null
+    name:Sunny
+```
+
+## Bean Copier 
+`BeanCopier` 用于根据属性值复制 bean。可以通过指定 `Converter` 进行相关复制前的转换操作。
+```
+    @Test
+    public void testBeanCopier() {
+        BeanCopier copier = BeanCopier.create(SampleClass.class, OtherSampleClass.class, true);
+        SampleClass bean = new SampleClass();
+        bean.setName("Sunny");
+        bean.setAge(20);
+        OtherSampleClass otherBean = new OtherSampleClass();
+        copier.copy(bean, otherBean, new Converter() {
+
+            public Object convert(Object value, Class target, Object context) {
+
+                System.out.println("需要复制的属性值:" + value);
+                System.out.println("修改需要复制的属性值...");
+                System.out.println("需要待复制的类的属性:" + target.getName());
+                // 对不同属性进行复制
+                if (target.getName().equals(Integer.class.getName())) {
+                    value = 24;
+                } else if (target.getName().equals(String.class.getName())){
+                    value = "other value";
+                }
+                return value;
+            }
+        });
+        System.out.println("name:" + otherBean.getName());
+        System.out.println("age:" + otherBean.getAge());
+    }
+```
+输出：
+```
+name:Sunny
+```
