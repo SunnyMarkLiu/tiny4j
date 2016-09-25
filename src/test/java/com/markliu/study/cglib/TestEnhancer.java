@@ -82,4 +82,36 @@ public class TestEnhancer {
         SampleClass proxy = (SampleClass) enhancer.create();
         System.out.println(proxy.test("world"));
     }
+
+    @Test
+    public void testLazyLoader() {
+        Enhancer enhancer = new Enhancer();
+        enhancer.setSuperclass(SampleClass.class);
+        enhancer.setCallback(new LazyLoader() {
+
+            public Object loadObject() throws Exception {
+
+                return new SampleClass("test");
+            }
+        });
+
+        SampleClass proxy = (SampleClass) enhancer.create();
+        System.out.println(proxy.test("world"));
+    }
+
+    @Test
+    public void testDispatcher() {
+        Enhancer enhancer = new Enhancer();
+        enhancer.setSuperclass(SampleClass.class);
+        enhancer.setCallback(new Dispatcher() {
+            public Object loadObject() throws Exception {
+                return new SampleClass("test");
+            }
+        });
+
+        SampleClass proxy = (SampleClass) enhancer.create();
+        System.out.println(proxy.test("world"));
+        // 由于不会 stored 不会保存生成的对象, 所以调用另一个方法会重新调用loadObject方法创建对象。
+        System.out.println(proxy.test2("world"));
+    }
 }

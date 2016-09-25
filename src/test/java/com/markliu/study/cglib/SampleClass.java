@@ -2,6 +2,14 @@ package com.markliu.study.cglib;
 
 public /*final*/ class SampleClass {
 
+    public SampleClass() {
+        System.out.println("SampleClass()...");
+    }
+
+    public SampleClass(String name) {
+        System.out.println("SampleClass()..." + name);
+    }
+
     public String test(String input) {
 
         return "Hello " + input;

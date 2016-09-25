@@ -128,4 +128,73 @@ another powerful callback dispatcher：`MethodInterceptor`
         System.out.println(proxy.test("world"));
     }
 ```
-`MethodInterceptor` 可是实现拦截方法的全面控制，可以在拦截方法的直线前后进行其他操作、修改拦截的方法的返回结果等。
+`MethodInterceptor` 可是实现拦截方法的全面控制，可以在拦截方法的直线前后进行其他操作、修改拦截的方法的返回结果等。但一般会发现许多人使用其他的方法，
+原因是其他的方法可能更有效率，而在使用 cglib 的框架中效率起着至关重要的作用。
+其他常用的 Callback：
+1. `LazyLoader`
+- LazyLoader 的 `loadObject` 方法与 `FixedValue` 的方法签名相同，但用途完全不同。`LazyLoader` 的 `loadObject` 方法用于返回被动态生成（`enhanced class`）类的子类，而
+`FixedValue` 返回的是所拦截的方法返回的值。
+- `LazyLoader` 懒加载模式生成的对象，只有在一个方法调用时创建该对象。所以 `LazyLoader` 常用于创建对象所需代价较大（expensive）但使用未知的类。
+- 注意 `enhanced class` 的有些构造方法在代理类和懒加载生成的类中都会调用。所以可以他通过 `Enhancer#create(Object...)` 选择构造函数，注意需要提供默认构造函数。
+```
+    public /*final*/ class SampleClass {
+    
+        public SampleClass() {
+            System.out.println("SampleClass()...");
+        }
+    
+        public SampleClass(String name) {
+            System.out.println("SampleClass()..." + name);
+        }
+        ...
+    }
+    
+    @Test
+    public void testLazyLoader() {
+        Enhancer enhancer = new Enhancer();
+        enhancer.setSuperclass(SampleClass.class);
+        enhancer.setCallback(new LazyLoader() {
+
+            public Object loadObject() throws Exception {
+
+                return new SampleClass("test");
+            }
+        });
+
+        SampleClass proxy = (SampleClass) enhancer.create();
+        System.out.println(proxy.test("world"));
+    }
+```
+输出：（会调用默认构造函数）
+```
+SampleClass()...
+SampleClass()...test
+Hello world
+```
+2. `Dispatcher`
+类似于 `LazyLoader` ，但不同的是，调用方法时`Dispatcher` 将会 invoked ，但不会保存生成的对象。
+```
+    @Test
+    public void testDispatcher() {
+        Enhancer enhancer = new Enhancer();
+        enhancer.setSuperclass(SampleClass.class);
+        enhancer.setCallback(new Dispatcher() {
+            public Object loadObject() throws Exception {
+                return new SampleClass("test");
+            }
+        });
+
+        SampleClass proxy = (SampleClass) enhancer.create();
+        System.out.println(proxy.test("world"));
+        // 由于不会 stored 不会保存生成的对象, 所以调用另一个方法会重新调用loadObject方法创建对象。
+        System.out.println(proxy.test2("world"));
+    }
+```
+输出：
+```
+SampleClass()...
+SampleClass()...test
+Hello world
+SampleClass()...test
+input: world
+```
