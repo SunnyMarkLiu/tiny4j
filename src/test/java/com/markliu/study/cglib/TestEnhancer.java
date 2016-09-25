@@ -212,4 +212,19 @@ public class TestEnhancer {
         System.out.println("name:" + beanMap.get("name"));
         System.out.println("age:" + beanMap.get("age"));
     }
+
+    @Test
+    public void testMixin() {
+
+        Class1 class1 = new Class1();
+        Class2 class2 = new Class2();
+
+        Mixin mixin = Mixin.create(
+                new Class[]{Interface1.class, Interface2.class, MixinInterface.class},
+                new Object[]{class1, class2});
+
+        MixinInterface mixinDelegate = (MixinInterface) mixin;
+        System.out.println(mixinDelegate.first());
+        System.out.println(mixinDelegate.second());
+    }
 }

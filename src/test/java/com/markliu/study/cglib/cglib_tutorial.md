@@ -344,3 +344,50 @@ age:24
 name:Sunny
 age:20
 ```
+
+## Mixin
+Cglib 的 `Mixin` 允许将多个类融合到一个类中。但是这些类需要 backed by interfaces：
+```
+    public interface Interface1 {
+        String first();
+    }
+    
+    public interface Interface2 {
+        String second();
+    }
+    
+    public class Class1 implements Interface1 {
+        public String first() {
+            return "first";
+        }
+    }
+    
+    public class Class2 implements Interface2 {
+        public String second() {
+            return "second";
+        }
+    }
+    
+    public interface MixinInterface extends Interface1, Interface2 {
+    }
+    
+    @Test
+    public void testMixin() {
+
+        Class1 class1 = new Class1();
+        Class2 class2 = new Class2();
+
+        Mixin mixin = Mixin.create(
+                new Class[]{Interface1.class, Interface2.class, MixinInterface.class},
+                new Object[]{class1, class2});
+
+        MixinInterface mixinDelegate = (MixinInterface) mixin;
+        System.out.println(mixinDelegate.first());
+        System.out.println(mixinDelegate.second());
+    }
+```
+输出：
+```
+first
+second
+```
