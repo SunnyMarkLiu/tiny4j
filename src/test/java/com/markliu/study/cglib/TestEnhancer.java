@@ -1,6 +1,5 @@
 package com.markliu.study.cglib;
 
-import junit.framework.Assert;
 import net.sf.cglib.beans.BeanCopier;
 import net.sf.cglib.beans.BeanGenerator;
 import net.sf.cglib.beans.BeanMap;
@@ -9,7 +8,6 @@ import net.sf.cglib.core.Converter;
 import net.sf.cglib.proxy.*;
 import org.junit.Test;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
