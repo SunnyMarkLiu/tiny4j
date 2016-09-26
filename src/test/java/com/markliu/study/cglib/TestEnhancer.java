@@ -225,4 +225,10 @@ public class TestEnhancer {
         System.out.println(mixinDelegate.first());
         System.out.println(mixinDelegate.second());
     }
+
+    @Test
+    public void testCGLibDynamicProxy() {
+        SampleClass proxy = CGLibDynamicProxy.getInstance().getProxy(SampleClass.class);
+        System.out.println(proxy.test("hello"));
+    }
 }

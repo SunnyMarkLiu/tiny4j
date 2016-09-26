@@ -30,7 +30,7 @@ public /*final*/ class SampleClass {
     }
 
     public String test(String input) {
-
+        System.out.println("test: " + input);
         return "Hello " + input;
     }
 
