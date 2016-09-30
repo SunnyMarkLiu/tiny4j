@@ -53,6 +53,7 @@ public class ProxyChain {
             // 如果目标类之前还有代理，则执行代理的操作
             if (doProxyIndex < proxyList.size()) {
                 result = proxyList.get(doProxyIndex).doProxy(this);
+                doProxyIndex++;
             } else { // 代理链执行完毕，执行目标类的方法
                 result = methodProxy.invokeSuper(targetObject, methodParams);
             }

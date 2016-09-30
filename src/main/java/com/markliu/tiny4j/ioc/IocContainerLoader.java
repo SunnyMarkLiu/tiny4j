@@ -1,5 +1,7 @@
 package com.markliu.tiny4j.ioc;
 
+import com.markliu.tiny4j.aop.AopHelper;
+
 /**
  * 初始化加载 Ioc 容器
  * <p>
@@ -10,7 +12,7 @@ package com.markliu.tiny4j.ioc;
 public class IocContainerLoader {
 
     public static void initIocContainer() {
-        Class<?>[] loadClass = {IoCInjectHelper.class};
+        Class<?>[] loadClass = {AopHelper.class, IoCInjectHelper.class};
         for (Class<?> cls : loadClass) {
             ClassScanLoadUtil.loadClass(cls.getName(), true);
         }

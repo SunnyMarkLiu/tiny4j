@@ -109,7 +109,7 @@ public class DispatcherServlet extends HttpServlet {
                     JsonWriter.writeJson(response, model);
                 }
             } catch (Exception e) {
-                LOGGER.error("handler this request error, caused by invoking the controller's method erroe!", e);
+                LOGGER.error("handler this request error, caused by invoking the controller's method error!", e);
             }
         }
     }

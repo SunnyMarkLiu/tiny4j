@@ -24,6 +24,7 @@ public class AopHelper {
      */
     static {
         try {
+            LOGGER.info("initial aop framework...");
             // 获取目标类与代理类列表的映射关系，为后续执行链式代理
             Map<Class<?>, List<Proxy>> targetProxyMap = getTargetProxyClassSetMap();
             for (Map.Entry<Class<?>, List<Proxy>> targetProxyEntry : targetProxyMap.entrySet()) {
@@ -33,6 +34,7 @@ public class AopHelper {
                 Object proxy = ProxyManager.createProxy(targetClass, proxyList);
                 IocContainer.setBean(targetClass, proxy);
             }
+            LOGGER.info("initial aop framework successful");
         } catch (Exception e) {
             LOGGER.error("aop initial failure!", e);
         }
@@ -47,7 +49,7 @@ public class AopHelper {
 
         Set<Class<?>> classSet = new HashSet<Class<?>>();
         // 该 Aspect 所要代理的目标类
-        Class<Annotation> targetAnnotation = aspect.value();
+        Class<? extends Annotation> targetAnnotation = aspect.value();
         if (!targetAnnotation.equals(Aspect.class)) {
             Set<Class<?>> classes = AnnotationClassUtil.getClassSetByAnnotation(targetAnnotation);
             classSet.addAll(classes);

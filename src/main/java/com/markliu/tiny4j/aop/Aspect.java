@@ -15,5 +15,5 @@ public @interface Aspect {
     /**
      * 切面所要拦截的类，该值也是一个注解
      */
-    Class<Annotation> value();
+    Class<? extends Annotation> value();
 }
