@@ -95,4 +95,19 @@ public class IocContainer {
         return BEAN_CLASSNAME_CONTAINER.get(className);
     }
 
+    /**
+     * IoC 容器添加 bean
+     */
+    public static void setBean(Class<?> cls, Object object) {
+        BEAN_CONTAINER.put(cls, object);
+
+        String className = object.getClass().getName();
+        className = className.substring(className.lastIndexOf(".") + 1, className.length());
+        System.out.println(className);
+        char firstChar = className.charAt(0);
+        String upper = (firstChar + "").toLowerCase();
+        className = className.replace(firstChar, upper.charAt(0));
+
+        BEAN_CLASSNAME_CONTAINER.put(className, object);
+    }
 }

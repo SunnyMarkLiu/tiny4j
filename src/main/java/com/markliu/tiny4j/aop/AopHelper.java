@@ -1,6 +1,9 @@
 package com.markliu.tiny4j.aop;
 
 import com.markliu.tiny4j.ioc.AnnotationClassUtil;
+import com.markliu.tiny4j.ioc.IocContainer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.annotation.Annotation;
 import java.util.*;
@@ -13,6 +16,27 @@ import java.util.*;
  * time  :下午12:07
  */
 public class AopHelper {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(AopHelper.class);
+
+    /*
+     * 静态代码块初始化 AOP 框架
+     */
+    static {
+        try {
+            // 获取目标类与代理类列表的映射关系，为后续执行链式代理
+            Map<Class<?>, List<Proxy>> targetProxyMap = getTargetProxyClassSetMap();
+            for (Map.Entry<Class<?>, List<Proxy>> targetProxyEntry : targetProxyMap.entrySet()) {
+                Class<?> targetClass = targetProxyEntry.getKey();
+                List<Proxy> proxyList = targetProxyEntry.getValue();
+                // 针对目标类及其代理类列表创建代理对象
+                Object proxy = ProxyManager.createProxy(targetClass, proxyList);
+                IocContainer.setBean(targetClass, proxy);
+            }
+        } catch (Exception e) {
+            LOGGER.error("aop initial failure!", e);
+        }
+    }
 
     /**
      * 获取某一 Aspect 注解所标注的所要代理的目标类
