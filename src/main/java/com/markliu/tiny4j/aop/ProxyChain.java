@@ -27,7 +27,7 @@ public class ProxyChain {
     /**
      * 当前执行的 Proxy 在代理链中的下标
      */
-    private int doProxyIndex;
+    private int doProxyIndex = 0;
 
     public ProxyChain(Object targetObject, Method targetMethod,
                       Object[] methodParams, MethodProxy methodProxy,

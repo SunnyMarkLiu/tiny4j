@@ -3,10 +3,7 @@ package com.markliu.tiny4j.aop;
 import com.markliu.tiny4j.ioc.AnnotationClassUtil;
 
 import java.lang.annotation.Annotation;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Aop 加载工具类
@@ -54,5 +51,13 @@ public class AopHelper {
                 proxyTargetsMap.put(proxyClass, classSet);
             }
         return proxyTargetsMap;
+    }
+
+    /**
+     * 获取目标类所对应的代理类集合，为后续执行链式代理准备
+     */
+    private static Map<Class<?>, List<Proxy>> getTargetProxyClassSetMap() {
+
+        return null;
     }
 }
