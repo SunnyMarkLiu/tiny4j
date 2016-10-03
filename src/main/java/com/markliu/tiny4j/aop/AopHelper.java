@@ -56,8 +56,27 @@ public class AopHelper {
     /**
      * 获取目标类所对应的代理类集合，为后续执行链式代理准备
      */
-    private static Map<Class<?>, List<Proxy>> getTargetProxyClassSetMap() {
+    private static Map<Class<?>, List<Proxy>> getTargetProxyClassSetMap() throws Exception{
 
-        return null;
+        Map<Class<?>, List<Proxy>> targetProxyMap = new HashMap<Class<?>, List<Proxy>>();
+
+        Map<Class<?>, Set<Class<?>>> proxyTargetsMap = getProxyTargetClassSetMap();
+        for (Map.Entry<Class<?>, Set<Class<?>>> proxyEntry : proxyTargetsMap.entrySet()) {
+            Class<?> proxyClass = proxyEntry.getKey();
+            Set<Class<?>> targetsClassSet = proxyEntry.getValue();
+            for (Class targetClass : targetsClassSet) {
+                // 实例化代理对象
+                Proxy proxy = (Proxy) proxyClass.newInstance();
+                // 完成目标类与代理类列表的映射
+                if (targetProxyMap.containsKey(targetClass)) {
+                    targetProxyMap.get(targetClass).add(proxy);
+                } else {
+                    List<Proxy> proxyList = new ArrayList<Proxy>();
+                    proxyList.add(proxy);
+                    targetProxyMap.put(targetClass, proxyList);
+                }
+            }
+        }
+        return targetProxyMap;
     }
 }
