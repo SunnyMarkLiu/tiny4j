@@ -2,7 +2,6 @@ package com.markliu.tiny4j.ioc;
 
 import com.markliu.tiny4j.annotation.Controller;
 import com.markliu.tiny4j.annotation.Service;
-import com.markliu.tiny4j.util.AnnotationClassUtil;
 import com.markliu.tiny4j.util.ReflectionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

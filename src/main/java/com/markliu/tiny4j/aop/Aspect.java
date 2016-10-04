@@ -1,6 +1,6 @@
 package com.markliu.tiny4j.aop;
 
-import java.lang.annotation.Annotation;
+import java.lang.annotation.*;
 
 /**
  * 切面类
@@ -8,6 +8,8 @@ import java.lang.annotation.Annotation;
  * date  :16-10-4
  * time  :上午9:44
  */
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
 public @interface Aspect {
 
     /**
