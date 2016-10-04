@@ -44,7 +44,7 @@ public abstract class AspectProxy implements Proxy {
             error(targetClass, targetObject, targetMethod, methodParams);
             throw e;
         } finally {
-            endProxy(targetClass, targetObject, targetMethod, methodParams);
+            endProxy(targetClass, targetObject, targetMethod, methodParams, result);
         }
         return result;
     }
@@ -76,7 +76,7 @@ public abstract class AspectProxy implements Proxy {
 
     }
 
-    protected void endProxy(Class<?> targetClass, Object targetObject, Method targetMethod, Object[] methodParams) {
+    protected void endProxy(Class<?> targetClass, Object targetObject, Method targetMethod, Object[] methodParams, Object result) {
 
     }
 
