@@ -33,7 +33,7 @@ public class TransactionProxy implements Proxy {
                 DatabaseHelper.commitTransaction();
             } catch (Exception e) {
                 LOGGER.error("transaction error...", e);
-                LOGGER.info("transaction error...");
+                LOGGER.info("transaction rollback...");
                 DatabaseHelper.rollbackTransaction();
             }
 

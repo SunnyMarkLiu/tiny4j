@@ -66,6 +66,7 @@ public class DatabaseHelper {
     public static void begainTransaction() {
 
         Connection connection = getConnection();
+        System.out.println(Thread.currentThread() + " -> " + connection);
         try {
             connection.setAutoCommit(false);
         } catch (Exception e) {
