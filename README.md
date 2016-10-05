@@ -1,3 +1,8 @@
 # tiny4j framework
 tiny framework for java web.
-**developping...Do not clone**
+**Features**
+- MVC framework
+- IoC container
+- AOP support
+- Transaction
+**developping...Do not clone.**
