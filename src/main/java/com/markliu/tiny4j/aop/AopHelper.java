@@ -1,6 +1,8 @@
 package com.markliu.tiny4j.aop;
 
+import com.markliu.tiny4j.annotation.Service;
 import com.markliu.tiny4j.ioc.AnnotationClassUtil;
+import com.markliu.tiny4j.ioc.ClassScanLoadUtil;
 import com.markliu.tiny4j.ioc.IocContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,6 +78,13 @@ public class AopHelper {
                 Set<Class<?>> classSet = getProxyTargetClass(aspect);
                 proxyTargetsMap.put(proxyClass, classSet);
             }
+
+        /* 添加 TransactionProxy 与所代理类集合的映射, 对于 Service 类默认支持事务，具体应用事务由
+            if (targetMethod.isAnnotationPresent(Transaction.class)) 决定
+         */
+        Set<Class<?>> serviceSet = AnnotationClassUtil.getClassSetByAnnotation(Service.class);
+        proxyTargetsMap.put(TransactionProxy.class, serviceSet);
+
         return proxyTargetsMap;
     }
 
